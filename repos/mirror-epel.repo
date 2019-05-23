@@ -1,0 +1,6 @@
+[mirror-epel]
+baseurl = http://repos.gpslab.cbr.redhat.com/repos/epel
+gpgcheck = 0
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+name = mirror-epel
+

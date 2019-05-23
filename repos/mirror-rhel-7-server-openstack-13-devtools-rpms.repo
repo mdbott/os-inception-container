@@ -1,0 +1,6 @@
+[mirror-rhel-7-server-openstack-13-devtools-rpms]
+baseurl = http://repos.gpslab.cbr.redhat.com/repos/rhel-7-server-openstack-13-devtools-rpms
+gpgcheck = 0
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+name = mirror-rhel-7-server-openstack-13-devtools-rpms
+
