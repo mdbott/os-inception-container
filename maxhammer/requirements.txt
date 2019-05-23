@@ -1,0 +1,9 @@
+-f http://repo.cbr.lab/artifactory/api/pypi/pypi/simple/
+Jinja2==2.7.2
+PyYAML==3.12
+requests==2.6.0
+configobj==4.7.2
+paramiko>=1.15.2
+dirtools>=0.2.0
+colorlog>=2.7.0
+zenlog>=1.1
