@@ -1,0 +1,100 @@
+# Maxhammer Distribution Manifest config
+maxhammer:
+
+  # default_source_base (Optional)
+  #
+  # If specified, all defined sources will be read relative to this base
+  # If unspecified, command-line arguments will be used to determine the source path
+  #
+  # Example:
+  # default_source_base: /etc/puppet/cloud_environments/icloud_admin4_liberty/
+
+
+  # default_destination_host (Optional)
+  #
+  # If specified, this defines your destination hostname for SFTP delivery
+  #
+  # Example:
+  # default_destination_host: localhost
+
+
+  # default_destination_port (Optional)
+  #
+  # If specified, this defines your destination port for SFTP delivery
+  # 
+  # Example:
+  # default_destination_port: 2234
+
+  
+  # default_destination_user (Optional)
+  #
+  # If specified, this defines your destination user for SFTP delivery
+  #
+  # Example:
+  # default_destination_user: stack
+
+  # default_auth_identity
+  #
+  # If specified, this defines your authentication private key for SFTP delivery
+  #
+  # Example:
+  # default_auth_identity: ~/.ssh/id_rsa
+
+
+  # process_paths (Required)
+  #
+  # Define all modules that are to be delivered to the destination.
+  #
+  # The module definition syntax is:
+  # modulename
+  #  process_method:    Defines the style of jinja templating that will be used to preprocess the module. 
+  #                     Valid values are 'ansible','overcloud' or 'none' for a straight copy.
+  #  sources:           A list of source path(s), relative to default_source_base, that will be distributed 
+  #  remote_destination:Defines the destination path (relative to default_destination_path) for all sources
+  #  local_destination: (optional) Defines a local destination path for all sources
+  #                                You can optionally use %environment% to insert your clouddata envrionment
+  #                                into the path, eg. /etc/%environment%/test would transform into
+  #                                /etc/admin4_liberty/test/
+  process_paths:
+
+    ceph-ansible-playbooks:
+      process_method: none
+      sources:
+        - ansible/ceph_ansible
+      remote_destination: /home/stack/ansible/ceph_ansible
+      local_destination: /etc/mh/ansible/playbooks/ceph-ansible
+
+    ansible-environment:
+      process_method: ansible
+      sources:
+        - ansible/env
+      remote_destination: /home/stack/ansible/env
+      local_destination: /etc/mh/ansible/environments/
+
+    overcloud:
+      process_method: overcloud
+      sources:
+        - overcloud
+      remote_destination: /home/stack/overcloud
+
+    overcloud-customisations:
+      process_method: none
+      sources:
+        - overcloud-customisations
+      filter:
+        exclude_list:
+          - "*/.*"
+      remote_destination: /home/stack/overcloud-custom
+
+    overcloud-ansible:
+      process_method: ansible
+      sources:
+        - overcloud-ansible
+      remote_destination: /home/stack/ansible
+
+    overcloud-modules:
+      process_method: none
+      sources:
+        - modules
+      remote_destination: /home/stack/modules
+
