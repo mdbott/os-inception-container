@@ -18,7 +18,6 @@ podman push registry.gpslab.cbr.redhat.com/funkytown/os-inception:1.0.0
 
 ```
 podman pull registry.gpslab.cbr.redhat.com/funkytown/os-inception:1.0.0
-
 podman run -t --privileged -v /etc/puppet/cloud_environments:/etc/puppet/cloud_environments:rw -v /etc/hosts:/etc/hosts:rw -v /home/cloud-user:/home/cloud-user:rw registry.gpslab.cbr.redhat.com/funkytown/os-inception:1.0.0 ansible-playbook /home/cloud-user/os-inception/create-openstack-on-openstack.yml --extra-vars "os_project=os14"
 ```
 

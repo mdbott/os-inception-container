@@ -1,0 +1,10 @@
+python-openstackclient
+python-neutronclient
+decorator==4.4.0
+openstacksdk==0.17
+ansible==2.6.4
+stevedore==1.27
+requests==2.18.0
+keystoneauth1==3.9.0
+ipaddress==1.0.17
+notario

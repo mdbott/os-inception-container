@@ -4,6 +4,8 @@ USER root
 
 # Add local repos to container
 COPY repos/* /etc/yum.repos.d/
+COPY requirements.txt /tmp/
+COPY Gemfile /tmp/
 COPY maxhammer /tmp/
 COPY foremanapi /tmp/
 
@@ -18,9 +20,9 @@ RUN echo "### Install/remove RPMs ###" && \
     curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py && \
     python /tmp/get-pip.py && \
     pip install --upgrade pip && \
-    pip install python-openstackclient python-neutronclient decorator==4.4.0 \
-      openstacksdk==0.15 ansible==2.6.4 stevedore==1.27 requests==2.18.0 \
-      keystoneauth1==3.9.0 ipaddress==1.0.17 notario && \
+    pip install -r /tmp/requirements.txt && \
+    echo "### Install ruby gems ###" && \
+    bundle install --gemfile=/tmp/Gemfile --clean && \
     echo "### Install maxhammer/foremanapi ###" && \
     cd /tmp/foremanapi && \
     python setup.py sdist && \
@@ -31,6 +33,7 @@ RUN echo "### Install/remove RPMs ###" && \
     echo "### Clean up ###" && \
     yum clean all && \
     rm -f /etc/yum.repos.d/* && \
+    rm -f /tmp/requirements.txt /tmp/Gemfile* && \
     rm -rf /tmp/maxhammer /tmp/foremanapi && \
     echo "### Create container user ###" && \
     useradd -u 1000 cloud-user
