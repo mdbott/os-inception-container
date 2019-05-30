@@ -5,9 +5,10 @@ USER root
 # Add local repos to container
 COPY repos/* /etc/yum.repos.d/
 COPY requirements.txt /tmp/
-COPY Gemfile /tmp/
-COPY maxhammer /tmp/
-COPY foremanapi /tmp/
+COPY Gemfile1 /tmp/
+COPY Gemfile2 /tmp/
+COPY maxhammer /tmp/maxhammer
+COPY foremanapi /tmp/foremanapi
 
 ENV LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
 
@@ -22,7 +23,8 @@ RUN echo "### Install/remove RPMs ###" && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     echo "### Install ruby gems ###" && \
-    bundle install --gemfile=/tmp/Gemfile --clean && \
+    bundle install --gemfile=/tmp/Gemfile1 --clean && \
+    bundle install --gemfile=/tmp/Gemfile2 --clean && \
     echo "### Install maxhammer/foremanapi ###" && \
     cd /tmp/foremanapi && \
     python setup.py sdist && \
@@ -32,9 +34,9 @@ RUN echo "### Install/remove RPMs ###" && \
     pip install /tmp/maxhammer/dist/maxhammer-*.tar.gz && \
     echo "### Clean up ###" && \
     yum clean all && \
-    rm -f /etc/yum.repos.d/* && \
-    rm -f /tmp/requirements.txt /tmp/Gemfile* && \
-    rm -rf /tmp/maxhammer /tmp/foremanapi && \
+    rm -f /etc/yum.repos.d/mirror* && \
+    rm -f /tmp/requirements.txt /tmp/get-pip.py /tmp/Gemfile* && \
+    rm -rf /tmp/.bundle /tmp/maxhammer /tmp/foremanapi && \
     echo "### Create container user ###" && \
     useradd -u 1000 cloud-user
 
