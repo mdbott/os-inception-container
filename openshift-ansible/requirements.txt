@@ -1,0 +1,9 @@
+ansible==2.7.10
+python-openstackclient==3.19.0
+python-heatclient==1.17.0
+python-neutronclient==6.12.0
+python-octaviaclient==1.9.0
+openstacksdk==0.27.0
+shade>=1.26
+dnspython>=1.16.0
+selinux

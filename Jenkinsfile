@@ -1,6 +1,6 @@
 #!/bin/groovy
 
-def moduleNames = ['os-inception']
+def moduleNames = ['os-inception', 'openshift-ansible']
 def buildImage(m) {
 	return {
 		dir(m) {
