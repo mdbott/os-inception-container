@@ -1,16 +1,37 @@
 #!/bin/groovy
 
+def moduleNames = ['os-inception']
+def buildImage(m) {
+	return {
+		dir(m) {
+			sh "podman build -t '${env.IMG_PREFIX}/${m}:${env.IMG_TAG}' ."
+		}
+	}
+}
+
+def pushImage(dir) {
+	return {
+		dir(dir) {
+			sh "podman push '${env.IMG_PREFIX}/${dir}:${env.IMG_TAG}'"
+		}
+	}
+}
+
+
 pipeline {
 	agent any
 
 	environment {
-		IMAGE_NAME = "${env.LAB_REGISTRY}/funkytown/os-inception:1.0.0"
+		IMG_PREFIX = "${env.LAB_REGISTRY}/funkytown"
+		IMG_TAG = '1.0.0'
 	}
 
 	stages {
 		stage('Build') {
 			steps {
-				sh 'podman build -t ${IMAGE_NAME} .'
+				script {
+					parallel moduleNames.collectEntries { m -> [m: buildImage(m)]}
+				}
 			}
 		}
 
@@ -19,7 +40,9 @@ pipeline {
 				branch 'master'
 			}
 			steps {
-				sh 'podman push ${IMAGE_NAME}'
+				script {
+					parallel moduleNames.collectEntries { m -> [m: pushImage(m)]}
+				}
 			}
 		}
 	}
