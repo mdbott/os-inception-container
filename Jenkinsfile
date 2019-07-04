@@ -21,6 +21,14 @@ def pushImage(dir) {
 pipeline {
 	agent any
 
+	options {
+		gitLabConnection('consulting-gitlab')
+	}
+
+	triggers {
+		gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
+	}
+
 	environment {
 		IMG_PREFIX = "${env.LAB_REGISTRY}/funkytown"
 		IMG_TAG = '1.0.0'
@@ -51,6 +59,12 @@ pipeline {
 		always {
 			deleteDir()
 //			sh 'podman rmi ${IMAGE_NAME}'
+		}
+		failure {
+			updateGitlabCommitStatus name: 'build', state: 'failed'
+		}
+		success {
+			updateGitlabCommitStatus name: 'build', state: 'success'
 		}
 	}
 }
