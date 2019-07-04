@@ -38,7 +38,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				script {
-					parallel moduleNames.collectEntries { m -> [m: buildImage(m)]}
+					parallel moduleNames.collectEntries { m -> [(m): buildImage(m)]}
 				}
 			}
 		}
@@ -49,7 +49,7 @@ pipeline {
 			}
 			steps {
 				script {
-					parallel moduleNames.collectEntries { m -> [m: pushImage(m)]}
+					parallel moduleNames.collectEntries { m -> [(m): pushImage(m)]}
 				}
 			}
 		}
