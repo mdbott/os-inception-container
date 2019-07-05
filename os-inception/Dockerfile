@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi7/ubi
 USER root
 
 # Add local repos to container
-COPY repos/* /etc/yum.repos.d/
+COPY repos /etc/yum.repos.d/
 COPY requirements.txt /tmp/
 COPY Gemfile1 /tmp/
 COPY Gemfile2 /tmp/
