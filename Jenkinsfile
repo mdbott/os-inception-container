@@ -9,10 +9,10 @@ def buildImage(m) {
 	}
 }
 
-def pushImage(dir) {
+def pushImage(m) {
 	return {
-		dir(dir) {
-			sh "podman push '${env.IMG_PREFIX}/${dir}:${env.IMG_TAG}'"
+		dir(m) {
+			sh "podman push '${env.IMG_PREFIX}/${m}:${env.IMG_TAG}'"
 		}
 	}
 }
