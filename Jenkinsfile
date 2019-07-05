@@ -72,7 +72,9 @@ pipeline {
 		always {
 			deleteDir()
 			script {
-				parallel modules.collectEntries { m -> [(m): deleteImage(m)]}
+				try {
+					parallel modules.collectEntries { m -> [(m): deleteImage(m)]}
+				} catch (ignored) {}
 			}
 		}
 		failure {
