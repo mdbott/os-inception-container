@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi7/python-27
+FROM registry.access.redhat.com/ubi8/python-27
 
 ENV LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
 
