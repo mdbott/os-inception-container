@@ -1,18 +1,31 @@
 #!/bin/groovy
 
-def moduleNames = ['os-inception']
-def buildImage(m) {
+def modules = ['os-inception', 'openshift-ansible']
+
+def imgName(module) {
+	return "${env.IMG_PREFIX}/${module}:${env.IMG_TAG}"
+}
+
+def buildImage(module) {
 	return {
-		dir(m) {
-			sh "podman build -t '${env.IMG_PREFIX}/${m}:${env.IMG_TAG}' ."
+		dir(module) {
+			sh "podman build -t '${imgName(module)}' ."
 		}
 	}
 }
 
-def pushImage(m) {
+def pushImage(module) {
 	return {
-		dir(m) {
-			sh "podman push '${env.IMG_PREFIX}/${m}:${env.IMG_TAG}'"
+		dir(module) {
+			sh "podman push '${imgName(module)}'"
+		}
+	}
+}
+
+def deleteImage(module) {
+	return {
+		dir(module) {
+			sh "podman rmi '${imgName(module)}'"
 		}
 	}
 }
@@ -38,7 +51,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				script {
-					parallel moduleNames.collectEntries { m -> [(m): buildImage(m)]}
+					parallel modules.collectEntries { m -> [(m): buildImage(m)]}
 				}
 			}
 		}
@@ -49,7 +62,7 @@ pipeline {
 			}
 			steps {
 				script {
-					parallel moduleNames.collectEntries { m -> [(m): pushImage(m)]}
+					parallel modules.collectEntries { m -> [(m): pushImage(m)]}
 				}
 			}
 		}
@@ -58,7 +71,11 @@ pipeline {
 	post {
 		always {
 			deleteDir()
-//			sh 'podman rmi ${IMAGE_NAME}'
+			script {
+				try {
+					parallel modules.collectEntries { m -> [(m): deleteImage(m)]}
+				} catch (ignored) {}
+			}
 		}
 		failure {
 			updateGitlabCommitStatus name: 'build', state: 'failed'
