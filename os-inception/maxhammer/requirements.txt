@@ -1,6 +1,6 @@
 -f http://repo.cbr.lab/artifactory/api/pypi/pypi/simple/
 Jinja2==2.7.2
-PyYAML==3.12
+PyYAML==5.4
 requests==2.6.0
 configobj==4.7.2
 paramiko>=1.15.2
